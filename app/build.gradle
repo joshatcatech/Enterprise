@@ -1,0 +1,27 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 19
+    buildToolsVersion '19.1.0'
+    defaultConfig {
+        applicationId 'com.ca.apim.mag.examplea'
+        minSdkVersion 16
+        targetSdkVersion 18
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile files('libs/android-integration-3.1.1-SNAPSHOT.jar')
+    compile files('libs/core-3.1.1-SNAPSHOT.jar')
+    compile files('libs/mobile-sso-sdk-2.3.0.76.jar')
+    compile files('libs/sc-light-jdk15on-1.47.0.2.jar')
+    compile files('libs/scprov-jdk15on-1.47.0.2.jar')
+    compile 'com.android.support:support-v4:21.0.3'
+}

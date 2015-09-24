@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Created by awitrisna on 2013-11-15.
+  ~ Copyright (c) 2013 CA Technologies. All rights reserved.
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false"
+          android:drawable="@drawable/facebook_disable" />
+    <item android:drawable="@drawable/facebook_enable" />
+</selector>

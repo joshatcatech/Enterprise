@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by awitrisna on 2013-11-15.
+  ~ Copyright (c) 2013 CA Technologies. All rights reserved.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.ca.apim.mag.enterprise"
+          android:versionCode="1"
+          android:versionName="1.0"
+          android:sharedUserId="com.ca.apim.mag.shared"
+          android:sharedUserLabel="@string/sharedUserLabel">
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="18"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- Enable for NFC Touchless login -->
+    <uses-feature android:name="android.hardware.nfc" android:required="true"/>
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <application android:label="Rent-A-Car" android:icon="@drawable/enterprise_icon">
+        <activity android:name="com.ca.apim.mag.enterprise.ExampleActivity"
+                  android:theme="@android:style/Theme.Holo"
+                  android:label="Rent-A-Car"
+                  android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="camsso" android:host="com.camsso.appa" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.ca.apim.mag.enterprise.CustomLogonActivity"
+                  android:theme="@android:style/Theme.Holo.Dialog"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="com.l7tech.msso.service.action.OBTAIN_CREDENTIALS"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.l7tech.msso.gui.SocialLoginActivity"
+                  android:theme="@android:style/Theme.Holo.Light"
+                  android:windowSoftInputMode="stateVisible"
+                  android:exported="false">
+        </activity>
+
+        <activity android:name="com.ca.apim.mag.enterprise.CustomConfigurationActivity"
+                  android:theme="@android:style/Theme.Holo.Light"
+                  android:label="@string/app_settings"
+                  android:icon="@drawable/config_settings"
+                  android:exported="false">
+        </activity>
+
+        <activity android:name="com.ca.apim.mag.enterprise.EnterpriseBrowser"
+                  android:label="Enterprise Browser"
+                  android:icon="@drawable/browser"
+                  android:exported="false"
+                  android:theme="@android:style/Theme.Holo.Light">
+            <intent-filter>
+                <action android:name="com.l7tech.msso.service.action.LAUNCH_ENTERPRISE_BROWSER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.ca.apim.mag.enterprise.EnterpriseBrowserApp"
+                  android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+
+            <intent-filter>
+                <action android:name="com.l7tech.msso.service.action.RENDER_WEBVIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name="com.l7tech.msso.service.MssoService"
+                 android:exported="false">
+        </service>
+    </application>
+</manifest>

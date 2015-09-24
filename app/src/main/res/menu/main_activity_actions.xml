@@ -1,0 +1,31 @@
+<!--
+  ~ Created by awitrisna on 2013-11-15.
+  ~ Copyright (c) 2013 CA Technologies. All rights reserved.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- Settings, should always be in the overflow -->
+
+    <item android:id="@+id/overflow"
+          android:icon="@drawable/ic_action_overflow"
+          android:showAsAction="always"
+          android:title="@string/overflow">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:id="@+id/action_settings"
+                  android:title="@string/action_settings"
+                  android:showAsAction="ifRoom"
+                  android:icon="@drawable/config_settings"></item>
+
+            <item android:id="@+id/entBrowser"
+                  android:icon="@drawable/browser"
+                  android:title="@string/entBrowser"
+                  android:showAsAction="ifRoom"></item>
+
+            <item android:id="@+id/scanQRCode"
+                  android:icon="@drawable/qr_code"
+                  android:title="@string/scanQRCode"
+                  android:showAsAction="ifRoom"></item>
+
+        </menu>
+    </item>
+</menu>

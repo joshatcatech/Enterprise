@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Created by awitrisna on 2013-11-15.
+  ~ Copyright (c) 2013 CA Technologies. All rights reserved.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Search, should appear as action button -->
+    <item android:id="@+id/back"
+          android:icon="@drawable/back"
+          android:title="@string/back"
+          android:showAsAction="ifRoom"/>
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/forward"
+          android:icon="@drawable/forward"
+          android:title="@string/forward"
+          android:showAsAction="ifRoom"/>
+</menu>
