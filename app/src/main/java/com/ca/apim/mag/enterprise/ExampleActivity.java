@@ -121,12 +121,12 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
             @Override
             public void onClick(View v) {
                 initAppEndpoint();
-
-                ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
-                if (a != null) {
-                    a.clear();
-                    a.notifyDataSetChanged();
-                }
+//
+//                ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
+//                if (a != null) {
+//                    a.clear();
+//                    a.notifyDataSetChanged();
+//                }
                 finalHttpFragment.downloadJson();
             }
         });
@@ -157,12 +157,12 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
                 logOutButton.setVisibility(View.VISIBLE);
                 isUserLoggedIn = true;
                 initAppEndpoint();
-
-                ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
-                if (a != null) {
-                    a.clear();
-                    a.notifyDataSetChanged();
-                }
+//
+//                ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
+//                if (a != null) {
+//                    a.clear();
+//                    a.notifyDataSetChanged();
+//                }
                 finalHttpFragment.downloadJson();
             }
         });
@@ -507,11 +507,11 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
 
     private void initAppEndpoint() {
 
-        if (productListDownloadUri == null || userInfoUri == null) {
+        if (userInfoUri == null) {
             MobileSso mobileSso = mobileSso();
             userInfoUri = mobileSso.getURI(mobileSso.getPrefix()+"/openid/connect/v1/userinfo");
-            setRequestUri();
         }
+        setRequestUri();
     }
 
     private void setRequestUri() {
