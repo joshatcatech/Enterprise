@@ -136,6 +136,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         // based on login status.
         final Button logOutButton = (Button) findViewById(R.id.logOutButton);
         final Button loginButton = (Button) findViewById(R.id.loginButton);
+        final ListView productList = (ListView) findViewById(R.id.itemList);
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +145,8 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
                 loginButton.setVisibility(View.VISIBLE);
                 isUserLoggedIn = false;
                 doServerLogout();
+
+                productList.setAdapter(null);
             }
         });
         registerForContextMenu(logOutButton);
@@ -157,12 +160,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
                 logOutButton.setVisibility(View.VISIBLE);
                 isUserLoggedIn = true;
                 initAppEndpoint();
-//
-//                ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
-//                if (a != null) {
-//                    a.clear();
-//                    a.notifyDataSetChanged();
-//                }
+
                 finalHttpFragment.downloadJson();
             }
         });
