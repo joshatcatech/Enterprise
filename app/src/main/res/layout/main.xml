@@ -62,7 +62,16 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.50"
                 android:text="Log Out"
+                android:visibility="gone"
                 />
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.50"
+            android:text="Login"
+            android:visibility="gone"
+            />
     </LinearLayout>
 </LinearLayout>
 
