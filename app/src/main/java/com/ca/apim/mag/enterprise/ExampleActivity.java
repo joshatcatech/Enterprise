@@ -44,6 +44,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.ca.mas.core.MobileSso;
 import com.ca.mas.core.MobileSsoFactory;
@@ -62,6 +64,9 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
     private static final int MENU_ITEM_DESTROY_TOKEN_STORE = 2;
     private static final int ACTION_SETTINGS_CONFIG_MENU = 1;
 
+    private static final String TEXT1 = "text1";
+    private static final String TEXT2 = "text2";
+
     //Application endpoint
     private URI productListDownloadUri = null;
 
@@ -70,7 +75,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
     ListView itemList;
     ProgressBar progressBar;
     static boolean usedMobileSso = false;
-
+    static boolean isUserLoggedIn = false;
 
     @Override
     public MobileSso mobileSso() {
@@ -78,6 +83,10 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         MobileSso mobileSso = MobileSsoFactory.getInstance(this);
         usedMobileSso = true;
         return mobileSso;
+    }
+
+    public boolean getUserLoggedIn() {
+        return isUserLoggedIn;
     }
 
     /**
@@ -111,6 +120,8 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         listButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                initAppEndpoint();
+
                 ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
                 if (a != null) {
                     a.clear();
@@ -129,9 +140,10 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                doServerLogout();
                 logOutButton.setVisibility(View.GONE);
                 loginButton.setVisibility(View.VISIBLE);
+                isUserLoggedIn = false;
+                doServerLogout();
             }
         });
         registerForContextMenu(logOutButton);
@@ -143,10 +155,19 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
                 // login
                 loginButton.setVisibility(View.GONE);
                 logOutButton.setVisibility(View.VISIBLE);
+                isUserLoggedIn = true;
+                initAppEndpoint();
+
+                ArrayAdapter a = ((ArrayAdapter) itemList.getAdapter());
+                if (a != null) {
+                    a.clear();
+                    a.notifyDataSetChanged();
+                }
+                finalHttpFragment.downloadJson();
             }
         });
 
-        initAppEndpoint();
+
     }
 
     @Override
@@ -167,16 +188,20 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
             case 1:
                 mobileSso().logout(false);
                 showMessage("Logged Out (client only)", Toast.LENGTH_SHORT);
+                isUserLoggedIn = false;
                 return true;
             case 2:
                 mobileSso().destroyAllPersistentTokens();
                 showMessage("Device Registration Destroyed (client only)", Toast.LENGTH_SHORT);
+                isUserLoggedIn = false;
                 return true;
             case 3:
                 doServerLogout();
+                isUserLoggedIn = false;
                 return true;
             case 4:
                 doServerUnregisterDevice();
+                isUserLoggedIn = false;
                 return true;
         }
         return false;
@@ -266,14 +291,25 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
     @Override
     public void setDownloadedJson(String json) {
         try {
+            List<Map<String, String>> list;
+
             List<Object> objects;
             if (json == null || json.trim().length() < 1) {
-                objects = Collections.emptyList();
+                list = Collections.emptyList();
             } else {
-                objects = parseProductListJson(json);
+                list = parseProductListJson(json);
             }
-            itemList.setAdapter(new ArrayAdapter<Object>(this, R.layout.listitem, objects));
-            GetUserNameToast();
+            //itemList.setAdapter(new ArrayAdapter<Object>(this, R.layout.listitem, objects));
+
+            String[] mapKeys = new String[] {TEXT1, TEXT2};
+            int[] layoutId = new int[] {android.R.id.text1, android.R.id.text2};
+
+            itemList.setAdapter(new SimpleAdapter(
+                    this, list, android.R.layout.simple_list_item_2, mapKeys, layoutId));
+
+            if (isUserLoggedIn)
+                GetUserNameToast();
+
         } catch (JSONException e) {
             showMessage("Error: " + e.getMessage(), Toast.LENGTH_LONG);
         }
@@ -302,25 +338,68 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         return null;
     }
 
-    private static List<Object> parseProductListJson(String json) throws JSONException {
+    private static List<Map<String, String>> parseProductListJson(String json) throws JSONException {
+        JSONObject parsed = (JSONObject) new JSONTokener(json).nextValue();
+        JSONArray items = parsed.getJSONArray("products");
+
+        if (isUserLoggedIn == true) {
+            return getMemberProducts(items);
+        } else {
+            return getProducts(items);
+        }
+    }
+
+    private static List<Map<String, String>> getProducts(JSONArray items) throws JSONException {
         try {
-            List<Object> objects = new ArrayList<Object>();
-            JSONObject parsed = (JSONObject) new JSONTokener(json).nextValue();
-            JSONArray items = parsed.getJSONArray("products");
+            List<Map<String, String>> listObjects =
+                    new ArrayList<Map<String, String>>(items.length());
+
             for (int i = 0; i < items.length(); ++i) {
+
+                Map<String, String> objects = new HashMap<String, String>();
+
                 JSONObject item = (JSONObject) items.get(i);
-                Integer id = (Integer) item.get("id");
-                String name = (String) item.get("name");
-                objects.add(new Pair<Integer, String>(id, name) {
-                    @Override
-                    public String toString() {
-                        return first + "  " + second;
-                    }
-                });
+                Integer id      = (Integer) item.get("id");
+                String size     = (String) item.get("size");
+                String location = (String) item.get("location");
+
+                objects.put(TEXT1, id + ". " + size);
+                objects.put(TEXT2, location);
+                listObjects.add(objects);
             }
-            return objects;
+
+            return listObjects;
         } catch (ClassCastException e) {
-            throw (JSONException) new JSONException("Response JSON was not in the expected format").initCause(e);
+            throw (JSONException) new JSONException(
+                    "Response JSON was not in the expected format").initCause(e);
+        }
+    }
+
+    private static List<Map<String, String>> getMemberProducts(JSONArray items) throws JSONException {
+        try {
+            List<Map<String, String>> listObjects =
+                    new ArrayList<Map<String, String>>(items.length());
+
+            for (int i = 0; i < items.length(); ++i) {
+
+                Map<String, String> objects = new HashMap<String, String>();
+
+                JSONObject item = (JSONObject) items.get(i);
+                Integer id      = (Integer) item.get("id");
+                String size     = (String) item.get("size");
+                String type     = (String) item.get("type");
+                String location = (String) item.get("location");
+                String price    = (String) item.get("price");
+
+                objects.put(TEXT1, id + ". " + size + " " + type);
+                objects.put(TEXT2, location + " - " + price);
+                listObjects.add(objects);
+            }
+
+            return listObjects;
+        } catch (ClassCastException e) {
+            throw (JSONException) new JSONException(
+                    "Response JSON was not in the expected format").initCause(e);
         }
     }
 
@@ -427,6 +506,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
     }
 
     private void initAppEndpoint() {
+
         if (productListDownloadUri == null || userInfoUri == null) {
             MobileSso mobileSso = mobileSso();
             userInfoUri = mobileSso.getURI(mobileSso.getPrefix()+"/openid/connect/v1/userinfo");
@@ -437,10 +517,12 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
     private void setRequestUri() {
         MobileSso mobileSso = mobileSso();
 
-        if (mobileSso.isLogin() == true) {
-            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix() + "/demo/member/products?operation=listProducts");
+        if (isUserLoggedIn == true) {
+            productListDownloadUri = mobileSso.getURI(
+                    mobileSso.getPrefix() + "/demo/member/products?operation=listProducts");
         } else {
-            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix() + "/demo/products?operation=listProducts");
+            productListDownloadUri = mobileSso.getURI(
+                    mobileSso.getPrefix() + "/demo/products?operation=listProducts");
         }
     }
 
@@ -474,6 +556,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
             }
         }
     }
+
 
 }
 

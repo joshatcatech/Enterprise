@@ -44,17 +44,17 @@ public class JsonDownloaderFragment extends HttpResponseFragment {
 
     void downloadJson() {
         // Can only be called while there is an activity associated
-        UserActivity activity = (UserActivity) getActivity();
+        ExampleActivity activity = (ExampleActivity) getActivity();
         activity.setProgressVisibility(ProgressBar.VISIBLE);
 
         final URI uri = activity.getJsonDownloadUri();
         HttpGet httpGet = new HttpGet(uri);
 
-        processRequest(httpGet, activity.mobileSso());
+        processRequest(httpGet, activity.getUserLoggedIn(), activity.mobileSso());
     }
 
-    void processRequest(HttpGet httpGet, MobileSso msso) {
-        if (msso.isLogin() == true) {
+    void processRequest(HttpGet httpGet, boolean userLoggedIn, MobileSso msso) {
+        if (userLoggedIn) {
             msso.processRequest(new PasswordGrantRequest(httpGet){
                 @Override
                 public String getScope(MssoContext context) {
