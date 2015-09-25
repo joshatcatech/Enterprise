@@ -120,18 +120,33 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
             }
         });
 
-        // Conditionally show login or logout button based on login status
+
+        // Initialize with login button and conditionally show login or logout button thereafter
+        // based on login status.
         final Button logOutButton = (Button) findViewById(R.id.logOutButton);
+        final Button loginButton = (Button) findViewById(R.id.loginButton);
+
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doServerLogout();
+//                doServerLogout();
+                logOutButton.setVisibility(View.GONE);
+                loginButton.setVisibility(View.VISIBLE);
             }
         });
         registerForContextMenu(logOutButton);
 
-        initAppEndpoint();
+        loginButton.setVisibility(View.VISIBLE);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // login
+                loginButton.setVisibility(View.GONE);
+                logOutButton.setVisibility(View.VISIBLE);
+            }
+        });
 
+        initAppEndpoint();
     }
 
     @Override
@@ -410,14 +425,25 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
             }
         });
     }
+
     private void initAppEndpoint() {
         if (productListDownloadUri == null || userInfoUri == null) {
             MobileSso mobileSso = mobileSso();
             userInfoUri = mobileSso.getURI(mobileSso.getPrefix()+"/openid/connect/v1/userinfo");
-            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix()+"/demo/products?operation=listProducts");
-            //productListDownloadUri = mobileSso.getURI("https://mag-longbow-rc1.ca.com:8443/demo/products?operation=listProducts");
+            setRequestUri();
         }
     }
+
+    private void setRequestUri() {
+        MobileSso mobileSso = mobileSso();
+
+        if (mobileSso.isLogin() == true) {
+            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix() + "/demo/member/products?operation=listProducts");
+        } else {
+            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix() + "/demo/products?operation=listProducts");
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
