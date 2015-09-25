@@ -5,7 +5,7 @@
   -->
 
 <resources>
-    <string name="app_name">Jedmere Travel</string>
+    <string name="app_name">Rent-A-Car</string>
     <string name="sharedUserLabel">Example Org</string>
     <string name="entBrowser">Enterprise Browser</string>
     <string name="overflow">overflow</string>

@@ -11,7 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
-import com.l7tech.msso.gui.AbstractLogonActivity;
+//import com.l7tech.msso.gui.AbstractLogonActivity;
+import com.ca.mas.core.gui.AbstractLogonActivity;
 
 public class CustomLogonActivity extends AbstractLogonActivity {
 

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion '19.1.0'
     defaultConfig {
         applicationId 'com.ca.apim.mag.examplea'
@@ -18,10 +18,18 @@ android {
 }
 
 dependencies {
-    compile files('libs/android-integration-3.1.1-SNAPSHOT.jar')
-    compile files('libs/core-3.1.1-SNAPSHOT.jar')
-    compile files('libs/mobile-sso-sdk-2.3.0.76.jar')
-    compile files('libs/sc-light-jdk15on-1.47.0.2.jar')
-    compile files('libs/scprov-jdk15on-1.47.0.2.jar')
-    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.ca.mas.core:mobile-api-gateway-sdk-3.0.1031@aar'
+    // Mandatory
+    compile 'com.android.support:appcompat-v7:22.1.0'
+    compile 'com.android.support:support-v4:22.1.0'
+    compile 'com.google.zxing:android-integration:3.2.0'
+    // For QRCode support
+    compile 'com.google.zxing:core:3.2.0'
+    // For QRCode support
+    compile 'com.madgag:scprov-jdk15on:1.47.0.2'
+    // Mandatory
+    compile 'com.madgag:sc-light-jdk15on:1.47.0.2'
+    // Mandatory
+    compile 'com.google.android.gms:play-services:7.5.0'
+    // For SmcControllerSample Only
 }

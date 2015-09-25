@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import com.l7tech.msso.app.App;
-import com.l7tech.msso.service.MssoIntents;
+//import com.l7tech.msso.app.App;
+//import com.l7tech.msso.service.MssoIntents;
+
+import com.ca.mas.core.app.App;
+import com.ca.mas.core.service.MssoIntents;
 
 import java.util.List;
 

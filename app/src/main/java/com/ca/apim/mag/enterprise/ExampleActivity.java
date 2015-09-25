@@ -29,10 +29,10 @@ import android.view.*;
 import android.widget.*;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.l7tech.msso.EnterpriseApp;
-import com.l7tech.msso.MobileSso;
-import com.l7tech.msso.MobileSsoFactory;
-import com.l7tech.msso.service.MssoIntents;
+//import com.l7tech.msso.EnterpriseApp;
+//import com.l7tech.msso.MobileSso;
+//import com.l7tech.msso.MobileSsoFactory;
+//import com.l7tech.msso.service.MssoIntents;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +44,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.ca.mas.core.MobileSso;
+import com.ca.mas.core.MobileSsoFactory;
+import com.ca.mas.core.EnterpriseApp;
+import com.ca.mas.core.service.MssoIntents;
 
 public class ExampleActivity extends FragmentActivity implements JsonDownloaderFragment.UserActivity {
     private static final String TAG = "ExampleA";
@@ -88,6 +93,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         if (savedInstanceState != null) {
+            //noinspection ResourceType
             progressBar.setVisibility(savedInstanceState.getInt(STATE_PROGRESS_VISIBILITY));
         }
 
@@ -114,6 +120,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
             }
         });
 
+        // Conditionally show login or logout button based on login status
         final Button logOutButton = (Button) findViewById(R.id.logOutButton);
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,7 +269,7 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
         String user1 = sharedUsername.getString("", "");
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.TOP | Gravity.LEFT, 0, 0);
-        toast.makeText(ExampleActivity.this, "Showing coupons for User: " + user1, toast.LENGTH_LONG).show();
+        toast.makeText(ExampleActivity.this, "Showing results for Enterprise Plus member: " + user1, toast.LENGTH_LONG).show();
     }
     /**
      * Utility method that parses a URI without throwing a checked exception if parsing fails.
@@ -401,13 +408,14 @@ public class ExampleActivity extends FragmentActivity implements JsonDownloaderF
                     showMessage(message, Toast.LENGTH_LONG);
                 }
             }
-        }, ExampleApp.class);
+        });
     }
     private void initAppEndpoint() {
         if (productListDownloadUri == null || userInfoUri == null) {
             MobileSso mobileSso = mobileSso();
             userInfoUri = mobileSso.getURI(mobileSso.getPrefix()+"/openid/connect/v1/userinfo");
-            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix()+"/protected/resource/products?operation=listProducts");
+            productListDownloadUri = mobileSso.getURI(mobileSso.getPrefix()+"/demo/products?operation=listProducts");
+            //productListDownloadUri = mobileSso.getURI("https://mag-longbow-rc1.ca.com:8443/demo/products?operation=listProducts");
         }
     }
     @Override

@@ -15,8 +15,8 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.l7tech.msso.app.App;
-import com.l7tech.msso.service.MssoIntents;
+import com.ca.mas.core.app.App;
+import com.ca.mas.core.service.MssoIntents;
 
 public class EnterpriseBrowserApp extends Activity implements GestureDetector.OnGestureListener {
 

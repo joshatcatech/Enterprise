@@ -12,7 +12,9 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import com.l7tech.msso.app.App;
+
+import com.ca.mas.core.app.App;
+
 import org.json.JSONObject;
 
 /**

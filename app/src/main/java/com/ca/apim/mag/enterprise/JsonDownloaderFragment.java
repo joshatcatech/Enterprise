@@ -9,8 +9,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.l7tech.msso.MobileSso;
-import com.l7tech.msso.gui.HttpResponseFragment;
+
+import com.ca.mas.core.MobileSso;
+import com.ca.mas.core.request.ClientCredentialsRequest;
+import com.ca.mas.core.context.MssoContext;
+import com.ca.mas.core.gui.HttpResponseFragment;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 
@@ -44,7 +48,12 @@ public class JsonDownloaderFragment extends HttpResponseFragment {
 
         final URI uri = activity.getJsonDownloadUri();
         HttpGet httpGet = new HttpGet(uri);
-        activity.mobileSso().processRequest(httpGet, getResultReceiver());
+        activity.mobileSso().processRequest(new ClientCredentialsRequest(httpGet){
+            @Override
+            public String getScope(MssoContext context) {
+                return "openid msso phone profile address email msso_client_register";
+            }
+        }, getResultReceiver());
     }
 
     void sendJsonToActivity(String json) {

@@ -21,7 +21,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
-    <application android:label="Rent-A-Car" android:icon="@drawable/enterprise_icon">
+    <application android:icon="@drawable/enterprise_icon">
+
         <activity android:name="com.ca.apim.mag.enterprise.ExampleActivity"
                   android:theme="@android:style/Theme.Holo"
                   android:label="Rent-A-Car"
@@ -36,19 +37,13 @@
                 <data android:scheme="camsso" android:host="com.camsso.appa" />
             </intent-filter>
         </activity>
-
         <activity android:name="com.ca.apim.mag.enterprise.CustomLogonActivity"
-                  android:theme="@android:style/Theme.Holo.Dialog"
-                  android:exported="false">
+            android:theme="@android:style/Theme.Holo.Dialog"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.l7tech.msso.service.action.OBTAIN_CREDENTIALS"/>
+                <action android:name="com.ca.mas.core.service.action.OBTAIN_CREDENTIALS"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        <activity android:name="com.l7tech.msso.gui.SocialLoginActivity"
-                  android:theme="@android:style/Theme.Holo.Light"
-                  android:windowSoftInputMode="stateVisible"
-                  android:exported="false">
         </activity>
 
         <activity android:name="com.ca.apim.mag.enterprise.CustomConfigurationActivity"
@@ -78,8 +73,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.l7tech.msso.service.MssoService"
-                 android:exported="false">
+        <service android:name="com.ca.mas.core.service.MssoService" android:exported="false">
         </service>
     </application>
 </manifest>
