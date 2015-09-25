@@ -14,6 +14,7 @@ import com.ca.mas.core.MobileSso;
 import com.ca.mas.core.request.ClientCredentialsRequest;
 import com.ca.mas.core.context.MssoContext;
 import com.ca.mas.core.gui.HttpResponseFragment;
+import com.ca.mas.core.request.PasswordGrantRequest;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -48,12 +49,26 @@ public class JsonDownloaderFragment extends HttpResponseFragment {
 
         final URI uri = activity.getJsonDownloadUri();
         HttpGet httpGet = new HttpGet(uri);
-        activity.mobileSso().processRequest(new ClientCredentialsRequest(httpGet){
-            @Override
-            public String getScope(MssoContext context) {
-                return "openid msso phone profile address email msso_client_register";
-            }
-        }, getResultReceiver());
+
+        processRequest(httpGet, activity.mobileSso());
+    }
+
+    void processRequest(HttpGet httpGet, MobileSso msso) {
+        if (msso.isLogin() == true) {
+            msso.processRequest(new PasswordGrantRequest(httpGet){
+                @Override
+                public String getScope(MssoContext context) {
+                    return "openid msso phone profile address email msso_client_register member_scope products";
+                }
+            }, getResultReceiver());
+        } else {
+            msso.processRequest(new ClientCredentialsRequest(httpGet){
+                @Override
+                public String getScope(MssoContext context) {
+                    return "openid msso phone profile address email msso_client_register products";
+                }
+            }, getResultReceiver());
+        }
     }
 
     void sendJsonToActivity(String json) {
