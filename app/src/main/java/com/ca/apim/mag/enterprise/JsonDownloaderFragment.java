@@ -79,7 +79,8 @@ public class JsonDownloaderFragment extends HttpResponseFragment {
     }
 
     @Override
-    protected void onResponse(long requestId, int resultCode, String errorMessage, HttpResponse httpResponse) {
+    protected void onResponse(
+            long requestId, int resultCode, String errorMessage, HttpResponse httpResponse) {
         // Might be invoked while we have no associated activity
         UserActivity activity = userActivity();
         if (activity != null)
